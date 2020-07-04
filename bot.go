@@ -155,6 +155,21 @@ func (bot *BotAPI) makeMessageRequest(endpoint string, params url.Values) (Messa
 	return message, nil
 }
 
+// makeMessageRequest makes a request to a method that returns a []Message.
+func (bot *BotAPI) MakeMessagesRequest(endpoint string, params url.Values) ([]Message, error) {
+	resp, err := bot.MakeRequest(endpoint, params)
+	if err != nil {
+		return []Message{}, err
+	}
+
+	var message []Message
+	json.Unmarshal(resp.Result, &message)
+
+	bot.debugLog(endpoint, params, message)
+
+	return message, nil
+}
+
 // UploadFile makes a request to the API with a file.
 //
 // Requires the parameter to hold the file not be in the params.
@@ -313,7 +328,7 @@ func (bot *BotAPI) debugLog(context string, v url.Values, message interface{}) {
 
 // sendExisting will send a Message with an existing file to Telegram.
 func (bot *BotAPI) sendExisting(method string, config Fileable) (Message, error) {
-	v, err := config.values()
+	v, err := config.Values()
 
 	if err != nil {
 		return Message{}, err
@@ -353,20 +368,20 @@ func (bot *BotAPI) uploadAndSend(method string, config Fileable) (Message, error
 // a new file, then sends it as needed.
 func (bot *BotAPI) sendFile(config Fileable) (Message, error) {
 	if config.useExistingFile() {
-		return bot.sendExisting(config.method(), config)
+		return bot.sendExisting(config.Method(), config)
 	}
 
-	return bot.uploadAndSend(config.method(), config)
+	return bot.uploadAndSend(config.Method(), config)
 }
 
 // sendChattable sends a Chattable.
 func (bot *BotAPI) sendChattable(config Chattable) (Message, error) {
-	v, err := config.values()
+	v, err := config.Values()
 	if err != nil {
 		return Message{}, err
 	}
 
-	message, err := bot.makeMessageRequest(config.method(), v)
+	message, err := bot.makeMessageRequest(config.Method(), v)
 
 	if err != nil {
 		return Message{}, err
@@ -840,9 +855,9 @@ func (bot *BotAPI) PromoteChatMember(config PromoteChatMemberConfig) (APIRespons
 
 // GetGameHighScores allows you to get the high scores for a game.
 func (bot *BotAPI) GetGameHighScores(config GetGameHighScoresConfig) ([]GameHighScore, error) {
-	v, _ := config.values()
+	v, _ := config.Values()
 
-	resp, err := bot.MakeRequest(config.method(), v)
+	resp, err := bot.MakeRequest(config.Method(), v)
 	if err != nil {
 		return []GameHighScore{}, err
 	}
@@ -891,14 +906,14 @@ func (bot *BotAPI) AnswerPreCheckoutQuery(config PreCheckoutConfig) (APIResponse
 
 // DeleteMessage deletes a message in a chat
 func (bot *BotAPI) DeleteMessage(config DeleteMessageConfig) (APIResponse, error) {
-	v, err := config.values()
+	v, err := config.Values()
 	if err != nil {
 		return APIResponse{}, err
 	}
 
-	bot.debugLog(config.method(), v, nil)
+	bot.debugLog(config.Method(), v, nil)
 
-	return bot.MakeRequest(config.method(), v)
+	return bot.MakeRequest(config.Method(), v)
 }
 
 // GetInviteLink get InviteLink for a chat
@@ -924,50 +939,50 @@ func (bot *BotAPI) GetInviteLink(config ChatConfig) (string, error) {
 
 // PinChatMessage pin message in supergroup
 func (bot *BotAPI) PinChatMessage(config PinChatMessageConfig) (APIResponse, error) {
-	v, err := config.values()
+	v, err := config.Values()
 	if err != nil {
 		return APIResponse{}, err
 	}
 
-	bot.debugLog(config.method(), v, nil)
+	bot.debugLog(config.Method(), v, nil)
 
-	return bot.MakeRequest(config.method(), v)
+	return bot.MakeRequest(config.Method(), v)
 }
 
 // UnpinChatMessage unpin message in supergroup
 func (bot *BotAPI) UnpinChatMessage(config UnpinChatMessageConfig) (APIResponse, error) {
-	v, err := config.values()
+	v, err := config.Values()
 	if err != nil {
 		return APIResponse{}, err
 	}
 
-	bot.debugLog(config.method(), v, nil)
+	bot.debugLog(config.Method(), v, nil)
 
-	return bot.MakeRequest(config.method(), v)
+	return bot.MakeRequest(config.Method(), v)
 }
 
 // SetChatTitle change title of chat.
 func (bot *BotAPI) SetChatTitle(config SetChatTitleConfig) (APIResponse, error) {
-	v, err := config.values()
+	v, err := config.Values()
 	if err != nil {
 		return APIResponse{}, err
 	}
 
-	bot.debugLog(config.method(), v, nil)
+	bot.debugLog(config.Method(), v, nil)
 
-	return bot.MakeRequest(config.method(), v)
+	return bot.MakeRequest(config.Method(), v)
 }
 
 // SetChatDescription change description of chat.
 func (bot *BotAPI) SetChatDescription(config SetChatDescriptionConfig) (APIResponse, error) {
-	v, err := config.values()
+	v, err := config.Values()
 	if err != nil {
 		return APIResponse{}, err
 	}
 
-	bot.debugLog(config.method(), v, nil)
+	bot.debugLog(config.Method(), v, nil)
 
-	return bot.MakeRequest(config.method(), v)
+	return bot.MakeRequest(config.Method(), v)
 }
 
 // SetChatPhoto change photo of chat.
@@ -979,29 +994,29 @@ func (bot *BotAPI) SetChatPhoto(config SetChatPhotoConfig) (APIResponse, error) 
 
 	file := config.getFile()
 
-	return bot.UploadFile(config.method(), params, config.name(), file)
+	return bot.UploadFile(config.Method(), params, config.name(), file)
 }
 
 // DeleteChatPhoto delete photo of chat.
 func (bot *BotAPI) DeleteChatPhoto(config DeleteChatPhotoConfig) (APIResponse, error) {
-	v, err := config.values()
+	v, err := config.Values()
 	if err != nil {
 		return APIResponse{}, err
 	}
 
-	bot.debugLog(config.method(), v, nil)
+	bot.debugLog(config.Method(), v, nil)
 
-	return bot.MakeRequest(config.method(), v)
+	return bot.MakeRequest(config.Method(), v)
 }
 
 // GetStickerSet get a sticker set.
 func (bot *BotAPI) GetStickerSet(config GetStickerSetConfig) (StickerSet, error) {
-	v, err := config.values()
+	v, err := config.Values()
 	if err != nil {
 		return StickerSet{}, err
 	}
-	bot.debugLog(config.method(), v, nil)
-	res, err := bot.MakeRequest(config.method(), v)
+	bot.debugLog(config.Method(), v, nil)
+	res, err := bot.MakeRequest(config.Method(), v)
 	if err != nil {
 		return StickerSet{}, err
 	}

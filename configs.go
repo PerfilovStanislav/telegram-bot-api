@@ -49,8 +49,8 @@ const (
 
 // Chattable is any config type that can be sent.
 type Chattable interface {
-	values() (url.Values, error)
-	method() string
+	Values() (url.Values, error)
+	Method() string
 }
 
 // Fileable is any config type that can be sent that includes a file.
@@ -72,7 +72,7 @@ type BaseChat struct {
 }
 
 // values returns url.Values representation of BaseChat
-func (chat *BaseChat) values() (url.Values, error) {
+func (chat *BaseChat) Values() (url.Values, error) {
 	v := url.Values{}
 	if chat.ChannelUsername != "" {
 		v.Add("chat_id", chat.ChannelUsername)
@@ -163,7 +163,7 @@ type BaseEdit struct {
 	ReplyMarkup     *InlineKeyboardMarkup
 }
 
-func (edit BaseEdit) values() (url.Values, error) {
+func (edit BaseEdit) Values() (url.Values, error) {
 	v := url.Values{}
 
 	if edit.InlineMessageID == "" {
@@ -197,8 +197,8 @@ type MessageConfig struct {
 }
 
 // values returns a url.Values representation of MessageConfig.
-func (config MessageConfig) values() (url.Values, error) {
-	v, err := config.BaseChat.values()
+func (config MessageConfig) Values() (url.Values, error) {
+	v, err := config.BaseChat.Values()
 	if err != nil {
 		return v, err
 	}
@@ -212,7 +212,7 @@ func (config MessageConfig) values() (url.Values, error) {
 }
 
 // method returns Telegram API method name for sending Message.
-func (config MessageConfig) method() string {
+func (config MessageConfig) Method() string {
 	return "sendMessage"
 }
 
@@ -225,8 +225,8 @@ type ForwardConfig struct {
 }
 
 // values returns a url.Values representation of ForwardConfig.
-func (config ForwardConfig) values() (url.Values, error) {
-	v, err := config.BaseChat.values()
+func (config ForwardConfig) Values() (url.Values, error) {
+	v, err := config.BaseChat.Values()
 	if err != nil {
 		return v, err
 	}
@@ -236,7 +236,7 @@ func (config ForwardConfig) values() (url.Values, error) {
 }
 
 // method returns Telegram API method name for sending Forward.
-func (config ForwardConfig) method() string {
+func (config ForwardConfig) Method() string {
 	return "forwardMessage"
 }
 
@@ -262,8 +262,8 @@ func (config PhotoConfig) params() (map[string]string, error) {
 }
 
 // Values returns a url.Values representation of PhotoConfig.
-func (config PhotoConfig) values() (url.Values, error) {
-	v, err := config.BaseChat.values()
+func (config PhotoConfig) Values() (url.Values, error) {
+	v, err := config.BaseChat.Values()
 	if err != nil {
 		return v, err
 	}
@@ -285,7 +285,7 @@ func (config PhotoConfig) name() string {
 }
 
 // method returns Telegram API method name for sending Photo.
-func (config PhotoConfig) method() string {
+func (config PhotoConfig) Method() string {
 	return "sendPhoto"
 }
 
@@ -300,8 +300,8 @@ type AudioConfig struct {
 }
 
 // values returns a url.Values representation of AudioConfig.
-func (config AudioConfig) values() (url.Values, error) {
-	v, err := config.BaseChat.values()
+func (config AudioConfig) Values() (url.Values, error) {
+	v, err := config.BaseChat.Values()
 	if err != nil {
 		return v, err
 	}
@@ -357,7 +357,7 @@ func (config AudioConfig) name() string {
 }
 
 // method returns Telegram API method name for sending Audio.
-func (config AudioConfig) method() string {
+func (config AudioConfig) Method() string {
 	return "sendAudio"
 }
 
@@ -369,8 +369,8 @@ type DocumentConfig struct {
 }
 
 // values returns a url.Values representation of DocumentConfig.
-func (config DocumentConfig) values() (url.Values, error) {
-	v, err := config.BaseChat.values()
+func (config DocumentConfig) Values() (url.Values, error) {
+	v, err := config.BaseChat.Values()
 	if err != nil {
 		return v, err
 	}
@@ -406,7 +406,7 @@ func (config DocumentConfig) name() string {
 }
 
 // method returns Telegram API method name for sending Document.
-func (config DocumentConfig) method() string {
+func (config DocumentConfig) Method() string {
 	return "sendDocument"
 }
 
@@ -416,8 +416,8 @@ type StickerConfig struct {
 }
 
 // values returns a url.Values representation of StickerConfig.
-func (config StickerConfig) values() (url.Values, error) {
-	v, err := config.BaseChat.values()
+func (config StickerConfig) Values() (url.Values, error) {
+	v, err := config.BaseChat.Values()
 	if err != nil {
 		return v, err
 	}
@@ -440,7 +440,7 @@ func (config StickerConfig) name() string {
 }
 
 // method returns Telegram API method name for sending Sticker.
-func (config StickerConfig) method() string {
+func (config StickerConfig) Method() string {
 	return "sendSticker"
 }
 
@@ -453,8 +453,8 @@ type VideoConfig struct {
 }
 
 // values returns a url.Values representation of VideoConfig.
-func (config VideoConfig) values() (url.Values, error) {
-	v, err := config.BaseChat.values()
+func (config VideoConfig) Values() (url.Values, error) {
+	v, err := config.BaseChat.Values()
 	if err != nil {
 		return v, err
 	}
@@ -493,7 +493,7 @@ func (config VideoConfig) name() string {
 }
 
 // method returns Telegram API method name for sending Video.
-func (config VideoConfig) method() string {
+func (config VideoConfig) Method() string {
 	return "sendVideo"
 }
 
@@ -506,8 +506,8 @@ type AnimationConfig struct {
 }
 
 // values returns a url.Values representation of AnimationConfig.
-func (config AnimationConfig) values() (url.Values, error) {
-	v, err := config.BaseChat.values()
+func (config AnimationConfig) Values() (url.Values, error) {
+	v, err := config.BaseChat.Values()
 	if err != nil {
 		return v, err
 	}
@@ -546,7 +546,7 @@ func (config AnimationConfig) name() string {
 }
 
 // method returns Telegram API method name for sending Animation.
-func (config AnimationConfig) method() string {
+func (config AnimationConfig) Method() string {
 	return "sendAnimation"
 }
 
@@ -558,8 +558,8 @@ type VideoNoteConfig struct {
 }
 
 // values returns a url.Values representation of VideoNoteConfig.
-func (config VideoNoteConfig) values() (url.Values, error) {
-	v, err := config.BaseChat.values()
+func (config VideoNoteConfig) Values() (url.Values, error) {
+	v, err := config.BaseChat.Values()
 	if err != nil {
 		return v, err
 	}
@@ -597,7 +597,7 @@ func (config VideoNoteConfig) name() string {
 }
 
 // method returns Telegram API method name for sending VideoNote.
-func (config VideoNoteConfig) method() string {
+func (config VideoNoteConfig) Method() string {
 	return "sendVideoNote"
 }
 
@@ -610,8 +610,8 @@ type VoiceConfig struct {
 }
 
 // values returns a url.Values representation of VoiceConfig.
-func (config VoiceConfig) values() (url.Values, error) {
-	v, err := config.BaseChat.values()
+func (config VoiceConfig) Values() (url.Values, error) {
+	v, err := config.BaseChat.Values()
 	if err != nil {
 		return v, err
 	}
@@ -653,7 +653,7 @@ func (config VoiceConfig) name() string {
 }
 
 // method returns Telegram API method name for sending Voice.
-func (config VoiceConfig) method() string {
+func (config VoiceConfig) Method() string {
 	return "sendVoice"
 }
 
@@ -663,8 +663,8 @@ type MediaGroupConfig struct {
 	InputMedia []interface{}
 }
 
-func (config MediaGroupConfig) values() (url.Values, error) {
-	v, err := config.BaseChat.values()
+func (config MediaGroupConfig) Values() (url.Values, error) {
+	v, err := config.BaseChat.Values()
 	if err != nil {
 		return v, err
 	}
@@ -679,7 +679,7 @@ func (config MediaGroupConfig) values() (url.Values, error) {
 	return v, nil
 }
 
-func (config MediaGroupConfig) method() string {
+func (config MediaGroupConfig) Method() string {
 	return "sendMediaGroup"
 }
 
@@ -691,8 +691,8 @@ type LocationConfig struct {
 }
 
 // values returns a url.Values representation of LocationConfig.
-func (config LocationConfig) values() (url.Values, error) {
-	v, err := config.BaseChat.values()
+func (config LocationConfig) Values() (url.Values, error) {
+	v, err := config.BaseChat.Values()
 	if err != nil {
 		return v, err
 	}
@@ -704,7 +704,7 @@ func (config LocationConfig) values() (url.Values, error) {
 }
 
 // method returns Telegram API method name for sending Location.
-func (config LocationConfig) method() string {
+func (config LocationConfig) Method() string {
 	return "sendLocation"
 }
 
@@ -718,8 +718,8 @@ type VenueConfig struct {
 	FoursquareID string
 }
 
-func (config VenueConfig) values() (url.Values, error) {
-	v, err := config.BaseChat.values()
+func (config VenueConfig) Values() (url.Values, error) {
+	v, err := config.BaseChat.Values()
 	if err != nil {
 		return v, err
 	}
@@ -735,7 +735,7 @@ func (config VenueConfig) values() (url.Values, error) {
 	return v, nil
 }
 
-func (config VenueConfig) method() string {
+func (config VenueConfig) Method() string {
 	return "sendVenue"
 }
 
@@ -747,8 +747,8 @@ type ContactConfig struct {
 	LastName    string
 }
 
-func (config ContactConfig) values() (url.Values, error) {
-	v, err := config.BaseChat.values()
+func (config ContactConfig) Values() (url.Values, error) {
+	v, err := config.BaseChat.Values()
 	if err != nil {
 		return v, err
 	}
@@ -760,7 +760,7 @@ func (config ContactConfig) values() (url.Values, error) {
 	return v, nil
 }
 
-func (config ContactConfig) method() string {
+func (config ContactConfig) Method() string {
 	return "sendContact"
 }
 
@@ -770,8 +770,8 @@ type GameConfig struct {
 	GameShortName string
 }
 
-func (config GameConfig) values() (url.Values, error) {
-	v, err := config.BaseChat.values()
+func (config GameConfig) Values() (url.Values, error) {
+	v, err := config.BaseChat.Values()
 	if err != nil {
 		return v, err
 	}
@@ -781,7 +781,7 @@ func (config GameConfig) values() (url.Values, error) {
 	return v, nil
 }
 
-func (config GameConfig) method() string {
+func (config GameConfig) Method() string {
 	return "sendGame"
 }
 
@@ -797,7 +797,7 @@ type SetGameScoreConfig struct {
 	InlineMessageID    string
 }
 
-func (config SetGameScoreConfig) values() (url.Values, error) {
+func (config SetGameScoreConfig) Values() (url.Values, error) {
 	v := url.Values{}
 
 	v.Add("user_id", strconv.Itoa(config.UserID))
@@ -817,7 +817,7 @@ func (config SetGameScoreConfig) values() (url.Values, error) {
 	return v, nil
 }
 
-func (config SetGameScoreConfig) method() string {
+func (config SetGameScoreConfig) Method() string {
 	return "setGameScore"
 }
 
@@ -830,7 +830,7 @@ type GetGameHighScoresConfig struct {
 	InlineMessageID string
 }
 
-func (config GetGameHighScoresConfig) values() (url.Values, error) {
+func (config GetGameHighScoresConfig) Values() (url.Values, error) {
 	v := url.Values{}
 
 	v.Add("user_id", strconv.Itoa(config.UserID))
@@ -848,7 +848,7 @@ func (config GetGameHighScoresConfig) values() (url.Values, error) {
 	return v, nil
 }
 
-func (config GetGameHighScoresConfig) method() string {
+func (config GetGameHighScoresConfig) Method() string {
 	return "getGameHighScores"
 }
 
@@ -859,8 +859,8 @@ type ChatActionConfig struct {
 }
 
 // values returns a url.Values representation of ChatActionConfig.
-func (config ChatActionConfig) values() (url.Values, error) {
-	v, err := config.BaseChat.values()
+func (config ChatActionConfig) Values() (url.Values, error) {
+	v, err := config.BaseChat.Values()
 	if err != nil {
 		return v, err
 	}
@@ -869,7 +869,7 @@ func (config ChatActionConfig) values() (url.Values, error) {
 }
 
 // method returns Telegram API method name for sending ChatAction.
-func (config ChatActionConfig) method() string {
+func (config ChatActionConfig) Method() string {
 	return "sendChatAction"
 }
 
@@ -881,8 +881,8 @@ type EditMessageTextConfig struct {
 	DisableWebPagePreview bool
 }
 
-func (config EditMessageTextConfig) values() (url.Values, error) {
-	v, err := config.BaseEdit.values()
+func (config EditMessageTextConfig) Values() (url.Values, error) {
+	v, err := config.BaseEdit.Values()
 	if err != nil {
 		return v, err
 	}
@@ -894,7 +894,7 @@ func (config EditMessageTextConfig) values() (url.Values, error) {
 	return v, nil
 }
 
-func (config EditMessageTextConfig) method() string {
+func (config EditMessageTextConfig) Method() string {
 	return "editMessageText"
 }
 
@@ -905,8 +905,8 @@ type EditMessageCaptionConfig struct {
 	ParseMode string
 }
 
-func (config EditMessageCaptionConfig) values() (url.Values, error) {
-	v, _ := config.BaseEdit.values()
+func (config EditMessageCaptionConfig) Values() (url.Values, error) {
+	v, _ := config.BaseEdit.Values()
 
 	v.Add("caption", config.Caption)
 	if config.ParseMode != "" {
@@ -916,7 +916,7 @@ func (config EditMessageCaptionConfig) values() (url.Values, error) {
 	return v, nil
 }
 
-func (config EditMessageCaptionConfig) method() string {
+func (config EditMessageCaptionConfig) Method() string {
 	return "editMessageCaption"
 }
 
@@ -926,11 +926,11 @@ type EditMessageReplyMarkupConfig struct {
 	BaseEdit
 }
 
-func (config EditMessageReplyMarkupConfig) values() (url.Values, error) {
-	return config.BaseEdit.values()
+func (config EditMessageReplyMarkupConfig) Values() (url.Values, error) {
+	return config.BaseEdit.Values()
 }
 
-func (config EditMessageReplyMarkupConfig) method() string {
+func (config EditMessageReplyMarkupConfig) Method() string {
 	return "editMessageReplyMarkup"
 }
 
@@ -1070,8 +1070,8 @@ type InvoiceConfig struct {
 	IsFlexible          bool
 }
 
-func (config InvoiceConfig) values() (url.Values, error) {
-	v, err := config.BaseChat.values()
+func (config InvoiceConfig) Values() (url.Values, error) {
+	v, err := config.BaseChat.Values()
 	if err != nil {
 		return v, err
 	}
@@ -1117,7 +1117,7 @@ func (config InvoiceConfig) values() (url.Values, error) {
 	return v, nil
 }
 
-func (config InvoiceConfig) method() string {
+func (config InvoiceConfig) Method() string {
 	return "sendInvoice"
 }
 
@@ -1142,11 +1142,11 @@ type DeleteMessageConfig struct {
 	MessageID int
 }
 
-func (config DeleteMessageConfig) method() string {
+func (config DeleteMessageConfig) Method() string {
 	return "deleteMessage"
 }
 
-func (config DeleteMessageConfig) values() (url.Values, error) {
+func (config DeleteMessageConfig) Values() (url.Values, error) {
 	v := url.Values{}
 
 	v.Add("chat_id", strconv.FormatInt(config.ChatID, 10))
@@ -1162,11 +1162,11 @@ type PinChatMessageConfig struct {
 	DisableNotification bool
 }
 
-func (config PinChatMessageConfig) method() string {
+func (config PinChatMessageConfig) Method() string {
 	return "pinChatMessage"
 }
 
-func (config PinChatMessageConfig) values() (url.Values, error) {
+func (config PinChatMessageConfig) Values() (url.Values, error) {
 	v := url.Values{}
 
 	v.Add("chat_id", strconv.FormatInt(config.ChatID, 10))
@@ -1181,11 +1181,11 @@ type UnpinChatMessageConfig struct {
 	ChatID int64
 }
 
-func (config UnpinChatMessageConfig) method() string {
+func (config UnpinChatMessageConfig) Method() string {
 	return "unpinChatMessage"
 }
 
-func (config UnpinChatMessageConfig) values() (url.Values, error) {
+func (config UnpinChatMessageConfig) Values() (url.Values, error) {
 	v := url.Values{}
 
 	v.Add("chat_id", strconv.FormatInt(config.ChatID, 10))
@@ -1199,11 +1199,11 @@ type SetChatTitleConfig struct {
 	Title  string
 }
 
-func (config SetChatTitleConfig) method() string {
+func (config SetChatTitleConfig) Method() string {
 	return "setChatTitle"
 }
 
-func (config SetChatTitleConfig) values() (url.Values, error) {
+func (config SetChatTitleConfig) Values() (url.Values, error) {
 	v := url.Values{}
 
 	v.Add("chat_id", strconv.FormatInt(config.ChatID, 10))
@@ -1218,11 +1218,11 @@ type SetChatDescriptionConfig struct {
 	Description string
 }
 
-func (config SetChatDescriptionConfig) method() string {
+func (config SetChatDescriptionConfig) Method() string {
 	return "setChatDescription"
 }
 
-func (config SetChatDescriptionConfig) values() (url.Values, error) {
+func (config SetChatDescriptionConfig) Values() (url.Values, error) {
 	v := url.Values{}
 
 	v.Add("chat_id", strconv.FormatInt(config.ChatID, 10))
@@ -1242,7 +1242,7 @@ func (config SetChatPhotoConfig) name() string {
 }
 
 // method returns Telegram API method name for sending Photo.
-func (config SetChatPhotoConfig) method() string {
+func (config SetChatPhotoConfig) Method() string {
 	return "setChatPhoto"
 }
 
@@ -1251,11 +1251,11 @@ type DeleteChatPhotoConfig struct {
 	ChatID int64
 }
 
-func (config DeleteChatPhotoConfig) method() string {
+func (config DeleteChatPhotoConfig) Method() string {
 	return "deleteChatPhoto"
 }
 
-func (config DeleteChatPhotoConfig) values() (url.Values, error) {
+func (config DeleteChatPhotoConfig) Values() (url.Values, error) {
 	v := url.Values{}
 
 	v.Add("chat_id", strconv.FormatInt(config.ChatID, 10))
@@ -1268,11 +1268,11 @@ type GetStickerSetConfig struct {
 	Name string
 }
 
-func (config GetStickerSetConfig) method() string {
+func (config GetStickerSetConfig) Method() string {
 	return "getStickerSet"
 }
 
-func (config GetStickerSetConfig) values() (url.Values, error) {
+func (config GetStickerSetConfig) Values() (url.Values, error) {
 	v := url.Values{}
 	v.Add("name", config.Name)
 	return v, nil
