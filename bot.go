@@ -156,18 +156,18 @@ func (bot *BotAPI) makeMessageRequest(endpoint string, params url.Values) (Messa
 }
 
 // makeMessageRequest makes a request to a method that returns a []Message.
-func (bot *BotAPI) MakeMessagesRequest(endpoint string, params url.Values) ([]Message, error) {
+func (bot *BotAPI) makeMessagesRequest(endpoint string, params url.Values) ([]Message, error) {
 	resp, err := bot.MakeRequest(endpoint, params)
 	if err != nil {
 		return []Message{}, err
 	}
 
-	var message []Message
-	json.Unmarshal(resp.Result, &message)
+	var messages []Message
+	json.Unmarshal(resp.Result, &messages)
 
-	bot.debugLog(endpoint, params, message)
+	bot.debugLog(endpoint, params, messages)
 
-	return message, nil
+	return messages, nil
 }
 
 // UploadFile makes a request to the API with a file.
@@ -316,6 +316,10 @@ func (bot *BotAPI) Send(c Chattable) (Message, error) {
 	}
 }
 
+func (bot *BotAPI) SendGroup(c Chattable) ([]Message, error) {
+	return bot.sendChattables(c)
+}
+
 // debugLog checks if the bot is currently running in debug mode, and if
 // so will display information about the request and response in the
 // debug log.
@@ -388,6 +392,22 @@ func (bot *BotAPI) sendChattable(config Chattable) (Message, error) {
 	}
 
 	return message, nil
+}
+
+// sendChattable sends a group Chattable.
+func (bot *BotAPI) sendChattables(config Chattable) ([]Message, error) {
+	v, err := config.Values()
+	if err != nil {
+		return []Message{}, err
+	}
+
+	messages, err := bot.makeMessagesRequest(config.Method(), v)
+
+	if err != nil {
+		return []Message{}, err
+	}
+
+	return messages, nil
 }
 
 // GetUserProfilePhotos gets a user's profile photos.
